@@ -1,0 +1,9 @@
+def plusMinus(arr):
+    # Write your code here
+    n = len(arr)
+    positive_values = sum(1 for i in arr if i > 0)
+    negative_values = sum(1 for i in arr if i < 0)
+    zeros_values = sum(1 for i in arr if i == 0)
+    print(f"{positive_values / n:.6f}")
+    print(f"{negative_values / n:.6f}")
+    print(f"{zeros_values / n:.6f}")
