@@ -1,8 +1,0 @@
-def miniMaxSum(arr):
-    # Write your code here
-    total_val = sum(arr)
-    min_val = min(arr)
-    max_val = max(arr)
-    min_sum = total_val - max_val
-    max_sum = total_val - min_val
-    print(min_sum, max_sum)
