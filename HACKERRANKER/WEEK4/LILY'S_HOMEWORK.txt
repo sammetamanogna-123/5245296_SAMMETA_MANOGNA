@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct {
+    int value;
+    int index;
+} Pair;
+
+int cmpAsc(const void *a,const void *b) {
+    Pair *p1 = (Pair *)a;
+    Pair *p2 = (Pair *)b;
+    return (p1->value - p2->value);
+}
+int cmpDesc(const void *a, const void *b) {
+    Pair *p1 = (Pair *)a;
+    Pair *p2 = (Pair *)b;
+    return (p2->value - p1->value);
+}
+int countSwaps(Pair arr[], int n) {
+    int *visited = (int *)calloc(n, sizeof(int));
+    int swaps = 0;
+    
+    for(int i=0;i<n;i++) {
+        if(visited[i] ||arr[i].index == i)
+            continue;
+            
+            int cycle_size = 0;
+            int j = i;
+            while(!visited[j]) {
+                visited[j] = 1;
+                j = arr[j].index;
+                cycle_size++;
+            }
+            if(cycle_size > 1) {
+                swaps += (cycle_size - 1);
+            }
+    }
+    free(visited);
+    return swaps;
+}
+int lilysHomework(int arr[], int n) {
+    Pair *ascArr = (Pair *)malloc(n * sizeof(Pair));
+    Pair *descArr = (Pair *)malloc(n*sizeof(Pair));
+    
+    for(int i=0;i<n;i++) {
+        ascArr[i].value=arr[i];
+        ascArr[i].index=i;
+        descArr[i].value=arr[i];
+        descArr[i].index=i;
+    }
+    qsort(ascArr, n, sizeof(Pair), cmpAsc);
+    qsort(descArr, n, sizeof(Pair), cmpDesc);
+    
+    int swapsAsc = countSwaps(ascArr, n);
+    int swapsDesc = countSwaps(descArr, n);
+    
+    free(ascArr);
+    free(descArr);
+    
+    return swapsAsc < swapsDesc ? swapsAsc : swapsDesc;
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    int *arr = (int *)malloc(n*sizeof(int));
+    for(int i=0;i<n;i++) {
+        scanf("%d", &arr[i]);
+    }
+    int result = lilysHomework(arr, n);
+    printf("%d\n", result);
+    
+    free(arr);
+    return 0;
+}
