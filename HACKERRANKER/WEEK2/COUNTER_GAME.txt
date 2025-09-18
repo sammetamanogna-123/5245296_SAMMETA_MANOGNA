@@ -1,0 +1,17 @@
+#include<stdio.h>
+
+char* counterGame(long n) {
+    int t = 0;
+    while (n > 1) {
+        if ((n & (n - 1)) == 0) {
+            n /= 2;
+        }
+        else {
+            long p = 1L << (63 - __builtin_clzl(n));
+            n -= p;
+        }
+        t++;
+    }
+    return (t % 2 == 0) ? "Richard" : "Louise";
+
+}
