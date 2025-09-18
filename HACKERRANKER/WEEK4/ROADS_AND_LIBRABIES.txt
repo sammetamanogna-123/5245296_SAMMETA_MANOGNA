@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100005
+ 
+int visited[MAX];
+int *adj[MAX];
+int adjSize[MAX];
+
+void addEdge(int u, int v) {
+    adj[u] = realloc(adj[u], (adjSize[u] + 1) * sizeof(int));
+    adj[v] = realloc(adj[v], (adjSize[v] + 1) * sizeof(int));
+    adj[u][adjSize[u]++] = v;
+    adj[v][adjSize[v]++] = u;
+}
+int dfs(int u) {
+    visited[u] = 1;
+    int count = 1;
+    for(int i=0;i<adjSize[u];i++) {
+        int v=adj[u][i];
+        if(!visited[v]) {
+            count += dfs(v);
+        }
+    }
+    return count;
+}
+int main() {
+    int q;
+    scanf("%d", &q);
+    while(q--) {
+        int n, m;
+        long long c_lib, c_road;
+        scanf("%d %d %lld %lld", &n, &m, &c_lib, &c_road);
+        for(int i=1;i<=n;i++) {
+            adj[i] = NULL;
+            adjSize[i] = 0;
+            visited[i] = 0;
+        }
+        for(int i=0;i<m;i++) {
+            int u, v;
+            scanf("%d %d", &u, &v);
+            addEdge(u, v);
+            
+        }
+        if(c_road >= c_lib) {
+            printf("%lld\n", c_lib * n);
+        } else {
+            long long totalCost = 0;
+            for(int i=1;i<=n;i++) {
+                if(!visited[i]) {
+                    int componentSize = dfs(i);
+                    totalCost += c_lib + (componentSize - 1) * c_road;
+                    
+                }
+            }
+            printf("lld\n", totalCost);
+        }
+        for(int i=1;i<=n;i++) {
+            free(adj[i]);
+        }
+    }
+    return 0;
+}
