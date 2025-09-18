@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+DoublyLinkedListNode* reverse(DoublyLinkedListNode* llist) {
+    DoublyLinkedListNode* cur = llist;
+    DoublyLinkedListNode* temp = NULL;
+    while (cur != NULL) {
+        temp = cur->prev;
+        cur->prev = cur->next;
+        cur->next = temp;
+        llist = cur;
+        cur = cur->prev;
+    }
+    return llist;
+
+}
