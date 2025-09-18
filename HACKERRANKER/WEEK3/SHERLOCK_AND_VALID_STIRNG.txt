@@ -1,0 +1,35 @@
+#include<stdio.h>
+
+char* isValid(char* s) {
+    int freq[26] = {0};
+    int freqcount = {0};
+    int vals = {0};
+    int count = {0};
+    int i, len = strlen(s);
+    for (i=0;i<len;++i)
+        freq[s[i] - 'a']++;
+    for(i=0;i<len;++i)
+        if(freq[i] > 0)
+            freqcount[freq[i]]++;
+    int idx = 0;
+    for(i=1;i<=100;++i) {
+        if(freqcount[i]){
+            if(idx<2) {
+                vals[idx] = i;
+                count[idx] = freqcount[i];
+                idx++;
+            } else {
+                return "NO";
+            }
+        }
+    }
+    if(idx == 1)
+        return "YES";
+    if (idx == 2) {
+        if ((count[0] == 1 && (vals - 1 == vals[1] || vals == 1)) || (count[1] == 1 && (vals[1] - 1 == vals || vals[1] == 1)))
+            return "YES";
+        else
+            return "NO";
+    }
+    return "NO";
+}
