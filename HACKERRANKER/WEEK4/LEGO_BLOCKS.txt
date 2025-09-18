@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MOD 1000000007
+#define MAX 1001
+
+int N, M;
+long long RowComb[MAX];
+long long ColumnComb[MAX];
+long long ColumnSolid[MAX];
+ void logic() {
+    scanf("%d %d", &N, &M);
+    memset(RowComb, 0 , sizeof(RowComb));
+    RowComb[0] = 1;
+    int pieces[4] = {1, 2, 3, 4};
+    for(int i=1;i<=M;i++) {
+        for(int j=0;j<4;j++) {
+            if(i - pieces[j] >= 0) {
+                RowComb[i] = (RowComb[i] + RowComb[i -pieces[j]]) %MOD;
+            }
+        }
+    }
+    for(int i=1;i<=M;i++) {
+        long long res=1;
+        for(int j=0;j<N;j++) {
+            res = (res * RowComb[i]) %MOD;
+            
+        }
+        ColumnComb[i] = res;
+    }
+    ColumnSolid[1] = ColumnComb[1];
+    for(int i=2;i<=M;i++) {
+        long long val = ColumnComb[i];
+        for(int j=1;j<i;j++) {
+            val = (val-(ColumnSolid[j] * ColumnComb[i-j]) % MOD + MOD) %MOD;
+        }
+        ColumnSolid[i] = val;
+    }
+    printf("%lld\n", ColumnSolid[M]);
+}
+int main() {
+    int T;
+    scanf("%d",&T);
+    while(T--) {
+        logic();
+    }
+    return 0;
+}
