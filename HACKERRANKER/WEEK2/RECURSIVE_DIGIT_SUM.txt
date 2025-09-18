@@ -1,0 +1,24 @@
+#include<stdio.h>
+
+int superDigitRec(long long n) {
+    if(n < 10) {
+        return (int) n;
+    }
+    long long s = 0;
+    while(n > 0) {
+        s += n % 10;
+        n /= 10;
+    }
+    return superDigitRec(s);
+}
+
+
+
+int superDigit(char* n, int k) {
+    long long s = 0;
+    for(int i = 0; n[i] != '\0'; i++) {
+        s += (n[i] - '0');
+    }
+    s *= k;
+    return superDigitRec(s);
+}
