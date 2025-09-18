@@ -1,0 +1,40 @@
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'timeConversion' function below.
+#
+# The function is expected to return a STRING.
+# The function accepts STRING s as parameter.
+#
+
+def timeConversion(s):
+    # Write your code here
+    time_period = s[-2:]
+    t = s[:-2].split(':')
+    h = int(t[0])
+    if time_period == 'AM':
+        if h == 12:
+            t[0] = '00'
+        else:
+            t[0] = f'{h:02d}'
+    else:
+        if h != 12:
+            h += 12
+        t[0] = f'{h:02d}'
+    return ':'.join(t)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s = input()
+
+    result = timeConversion(s)
+
+    fptr.write(result + '\n')
+
+    fptr.close()
+
