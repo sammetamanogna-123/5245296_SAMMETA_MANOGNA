@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<math.h>
+
+#define MAXN 50005
+#define MAXQ 1200
+
+void generate_primes(int q, int primes[]) {
+    int limit = 20000;
+    bool isPrime[limit + 1];
+    for(int i=0;i<=limit;i++) isPrime[i] = true;
+    isPrime[0] = isPrime[1] = false;
+    
+    for(int p=2;p*p<=limit;p++) {
+        if(isPrime[p]) {
+            for(int k = p * p; k <= limit; k += p)
+            isPrime[k] = false;
+        }
+    }
+    int count = 0;
+    for(int i=2; i<=limit && count < q;i++){
+        if(isPrime[i]) {
+            primes[count++] = i;
+        }
+    }
+}
+int main() {
+    int n, q;
+    scanf("%d %d", &n, &q);
+    int* numbers = (int*)malloc(n * sizeof(int));
+    for(int i=0;i<n;i++) {
+        scanf("%d", &numbers[i]);
+    }
+    int primes[MAXQ];
+    generate_primes(q, primes);
+    int* A = (int*)malloc(n * sizeof(int));
+    int topA = -1;
+    for(int i=0;i<n;i++) {
+        A[++topA] = numbers[i];
+    }
+    int* output = (int*)malloc(n*sizeof(int));
+    int outputCount = 0;
+    for(int i=0;i<q;i++) {
+        int prime = primes[i];
+        int* B = (int*)malloc(n*sizeof(int));
+        int topB = -1;
+        int* nextA = (int*)malloc(n*sizeof(int));
+        int topNextA = -1;
+        
+        while(topA >= 0) {
+            int plate = A[topA--];
+            if(plate % prime == 0) {
+                B[++topB] = plate;
+            } else {
+                nextA[++topNextA] = plate;
+            }
+        }
+        while (topB >= 0) {
+            output[outputCount++] = B[topB--];
+        }
+        free(A);
+        free(B);
+        A = nextA;
+        topA =topNextA;
+    }
+    while(topA >= 0) {
+        output[outputCount++] = A[topA--];
+    }
+    for(int i=0;i<outputCount;i++) {
+        printf("%d\n", output[i]);
+    }
+    free(numbers);
+    free(A);
+    free(output);
+    
+    return 0;
+}
