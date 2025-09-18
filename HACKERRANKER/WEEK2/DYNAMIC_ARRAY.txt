@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_Q 100000
+#define MAX_N 100000
+int* arr[MAX_N];
+int sizes[MAX_N];
+int capacities[MAX_N];
+void append(int index, int value) {
+    if(capacities[index] == 0) {
+        capacities[index] = 2;
+        arr[index] = (int*)malloc(capacities[index] * sizeof(int));
+        
+    }
+    if(sizes[index] == capacities[index]) {
+        capacities[index] *= 2;
+        arr[index] = (int*)realloc(arr[index], capacities[index]* sizeof(int));
+        
+    }
+    arr[index][sizes[index]++] = value;
+}
+int main() {
+    int n, q;
+    scanf("%d %d", &n, &q);
+    for(int i=0;i<n;i++){
+        sizes[i] = 0;
+        capacities[i]= 0;
+        arr[i] = NULL;
+    }
+    int lastAnswer = 0;
+    for(int i=0;i<q;i++) {
+        int type, x, y;
+        scanf("%d %d %d", &type, &x, &y);
+        int idx = (x ^ lastAnswer) % n;
+        if(type == 1){
+            append(idx,y);
+        }else if(type == 2) {
+            int size = sizes[idx];
+            lastAnswer = arr[idx][y % size];
+            printf("%d\n", lastAnswer);
+            
+            
+        }
+    }
+    for(int i=0;i<n;i++){
+        free(arr[i]);
+    }
+    return 0;
+}
