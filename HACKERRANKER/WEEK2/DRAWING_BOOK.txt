@@ -1,0 +1,8 @@
+#include<stdio.h> 
+
+int pageCount(int n, int p) {
+    int f = p / 2; //front
+    int b = (n / 2) - (p / 2); //back
+    return f < b ? f : b;
+
+}
