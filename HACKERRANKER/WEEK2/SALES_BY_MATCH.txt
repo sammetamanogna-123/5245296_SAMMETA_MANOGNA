@@ -1,0 +1,14 @@
+#include<stdio.h>
+
+int sockMerchant(int n, int ar_count, int* ar) {
+    int freq[101] = {0};
+    int p = 0;
+    for (int i = 0; i < n; i++) {
+        freq[ar[i]]++;
+    }
+    for (int c = 0; c < 101; c++) {
+        p += freq[c] / 2;
+    }
+    return p;
+
+}
