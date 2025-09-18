@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct {
+    int *arr;
+    int size;
+    int capacity;
+} MinHeap;
+
+MinHeap* createHeap(int cap) {
+    MinHeap* heap = malloc(sizeof(MinHeap));
+    heap->arr = malloc(sizeof(int) * cap);
+    heap->size = 0;
+    heap->capacity = cap;
+    return heap;
+}
+
+void swap(int *a, int *b) {int t = *a; *a = *b; *b = t;}
+void heapifyUp(MinHeap* h, int i) {
+    while(i > 0 && h->arr[i]<h->arr[(i-1)/2]) {
+        swap(&h->arr[i], &h->arr[(i-1)/2]);
+        i = (i-1)/2;       
+    }
+    
+ }
+ void heapifyDown(MinHeap* h, int i){
+    int left, right, smallest;
+    while(1) {
+        left = 2*i +1;
+        right = 2*i +2;
+        smallest = i;
+        if(left < h->size && h->arr[left] < h->arr[smallest]) smallest = left;
+        if(right < h->size && h->arr[right] < h->arr[smallest]) smallest = right;
+        if(smallest != i) {swap(&h->arr[i], &h->arr[smallest]); i = smallest; }
+        else break;
+    }
+ }
+ void insert(MinHeap* h, int val) {
+    if(h->size == h->capacity) return;
+    h->arr[h->size] = val;
+    heapifyUp(h, h->size);
+    h->size++;
+ }
+int getMin(MinHeap* h){
+    return h->size > 0 ? h->arr[0] : -1;
+}
+void deleteVal(MinHeap* h, int val) {
+    int idx = -1;
+    for(int i=0;i<h->size;i++) {
+        if(h->arr[i] == val) {
+            idx = i;
+            break;
+        }
+    }
+    if(idx == -1) return;
+    
+    h->arr[idx] = h->arr[h->size - 1];
+    h->size--;
+    
+    if(idx < h->size) {
+        heapifyUp(h, idx);
+        heapifyDown(h, idx);
+    }
+}
+
+int main() {
+
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */ 
+    int Q;
+    scanf("%d", &Q);
+    MinHeap* heap = createHeap(100000);
+    while(Q--) {
+        int cmd, val;
+        scanf("%d", &cmd);
+        if(cmd==1) {
+            scanf("%d", &val);
+            insert(heap, val);
+        } else if(cmd==2) {
+            scanf("%d", &val);
+            deleteVal(heap, val);
+        } else if(cmd==3) {
+            printf("%d\n", getMin(heap));
+        }
+    } 
+    free(heap->arr);
+    free(heap);  
+    return 0;
+}
